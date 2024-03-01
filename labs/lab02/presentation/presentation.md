@@ -33,7 +33,7 @@ sansfont: PT Sans
 monofont: PT Mono
 mainfontoptions: Ligatures=TeX
 romanfontoptions: Ligatures=TeX
-sansfontoptions: Ligatures=Tex,Scale=MatchLowercase
+sansfontoptions: Ligatures=TeX,Scale=MatchLowercase
 monofontoptions: Scale=MatchLowercase,Scale=0.9
 ---
 

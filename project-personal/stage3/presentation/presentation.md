@@ -95,7 +95,7 @@ monofontoptions: Scale=MatchLowercase,Scale=0.9
 
 ![ пост на тему "Язык разметки Маркдаун" ](image/5.png){#fig:005 width=60%}
 
-![  ](image/.png){#fig:00 width=60%}
+
 
 # Выводы
 

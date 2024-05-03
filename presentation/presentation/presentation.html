@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Четвергова Мария Викторовна">
+  <title>Презентация к докладу на тему</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reveal.css">
+  <style>
+.reveal .sourceCode { 
+overflow: visible;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/theme/beige.css" id="theme">
+  
+  
+  
+  
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Презентация к докладу на тему</h1>
+  <p class="subtitle">Система инициализации RUNIT</p>
+  <p class="author">Четвергова Мария Викторовна</p>
+  <p class="institute">Российский университет дружбы народов, Москва,
+Россия</p>
+  <p class="date">2 мая 2024 г.</p>
+</section>
+
+<section>
+<section id="информация" class="title-slide slide level1">
+<h1>Информация</h1>
+
+</section>
+<section id="докладчик" class="slide level2">
+<h2>Докладчик</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<ul>
+<li>Четвергова Мария Викторовна</li>
+<li>Студентка первого курса</li>
+<li>Направление “Прикладная информатика”</li>
+<li>Российский университет дружбы народов</li>
+<li>1132232886@pfur.ru</li>
+</ul>
+</div><div class="column" style="width:30%;">
+
+</div>
+</div>
+</section>
+<section id="актуальность" class="slide level2">
+<h2>Актуальность</h2>
+<p>Система инициализации является ключевым компонентом любой
+операционной системы: она обеспечивает запуск необходимых сервисов и
+приложений при старте компьютера. Одной из инновационных систем
+инициализации является Runit. Runit – это легковесная и надежная система
+инициализации, которая активно используется в различных дистрибутивах
+Linux. В рамках доклада мы рассмотрим основные принципы работы,
+преимущества и способы настройки и управления этой системой. Давайте
+погрузимся в мир Runit и узнаем, как она помогает сделать процесс
+загрузки операционной системы более эффективным и слаженным.</p>
+</section>
+<section id="цели-и-задачи" class="slide level2">
+<h2>Цели и задачи</h2>
+<p>Целью доклада является выявление сильных сторон системы инициализации
+RUNIT и преведение аргументов в её пользу.</p>
+<ol type="1">
+<li>Вступление</li>
+<li>Основная часть</li>
+<li>Что такое СИ Runit</li>
+<li>Основные принципы работы</li>
+<li>Преимущества</li>
+<li>Способы настройки</li>
+<li>Примеры применения Runit</li>
+<li>Заключение</li>
+<li>Библиография</li>
+</ol>
+</section>
+<section id="что-такое-си-runit" class="slide level2">
+<h2>1. Что такое СИ Runit?</h2>
+<p><img data-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFUAAABMCAYAAAAcLPsJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAQqSURBVHhe7ZtNaBNbFIBPHy7irkIX4+4Fsklx0brqFNwE3uJF3Ixk0RQX0pVG3dSNRF3UPFdR4ZEqiHUjya5duFAQ0o2QLIRUEKqgGKGLFCpMwEIKLs67kzkTM39JOvTAszkfHHrm3pnJ8M29M/fepBOoAOFI+YP+CkeISGVApDIgUhkQqQyIVAZEKgMilQGRyoBIZUCkMiBSGRCpDIhUBkQqAyKVAZHKgEhlQKQyIFIZEKkMiFQGRCoDIpUBkcqASGVgfKTub8FqdhpOT5yG6ewqbO1TOQfWb6mOPx2s3tKs34z1QrtVVaU8jElLbcPul13KbaztNuWBHNThn6sVcB81GmMidRK0hEa5jbU9SbmfA9h6tAy3v9PmYaEWe/z50cDSQhI10DC5UMLGDyoPoFMvoG49JjJlbFHZYRgfqaPSLGNWo2dvRKkypOrj4NMaLOqLUInyIO2H5AajuoG1izeMCt2/VhVLV9KYtO5sIo3Fuv0+bVWMwOMK9W51aH3vvF1aWM749wEwsLyjqs1tXF9ZQj1hl8fnlrC46W9XYZ/lbYWtV3lMOS00JJzrH8bQ7t/5/AwNz8mNylc03xb8FzFTxAYdZ77J42x/nYr+i+p8KGHaU++WatHB7cdp1z6W1NJGCQ2S6Q4Ncy9NOraPvSrmZzz79kndfpxSz1pPfUCMKnVo948lpuEs5Q7t17fh4lMNSh8RGg/VI93h/YF6b9pMJqchTnkQsTNnYZ7ycGKQnPXutQHXrr6C+RemahAmVO+oW9djF1bvrsEWbfWYSsF51TLCSF6pghIMtRUqcMiUu+XKUzfyc1Q+hEjP1M0XbcjeXYKkGpPMXroJS1QOMzGlgRsNsv+uwfKcNSCahFT6ol3s8L4JrYEDUH6ivaj+MiCVoHzKgHwlC5qWgsKTHPS3Gx7m4bzuHnO6aUGbcwo6AtGknnN37fiC6iatquoe/O30dyCSVOPPQS1lvKnfm4jYUk+cpEQIIppUIRT9DjJKndIGDqmOM3xSYyfhFKUO2zt9879vTWhQetyIJLW936FsEHGIZyglNt817DXMb2oAv7CohvH/L6xhoYu3DWhYF/y9Dg9urEHTLh1Od141iKZ/mgp/F7G2R/UD6C2h+ULD1P0C5rzl19fR/EkHdwmapqrp7POvVG9ibUX31ec2PFPVoGmqmu4+++xZ+99Z/7VC5QpdTVFH/55gsNSQBRUn/HN1P+aHMi5fsNYxrWPiqGdyWOoufNSw4DmfHQVVYxG2oEKxUh5ST2cJW1BxgvbrsVfD4mUd1ftA1avrvVzA9Y+H++JF/t+fARlSMSBSGRCpDIhUBkQqAyKVAZHKgEhlQKQyIFIZEKkMiFQGRCoDIpUBkcqASGVApDIgUhkQqQyIVAZEKgMilQGRyoBIZUCkMiBSGRCpRw7Af42OsSwvw0aeAAAAAElFTkSuQmCC" id="fig:001" style="width:50.0%" /></p>
+<p>Runit - это кроссплатформенная система инициализации, которая может
+работать в Linux, Solaris и MacOS. Это отличная альтернатива для SystemV
+с поддержкой мониторинга состояния служб.</p>
+</section>
+<section id="основные-принципы-работы-си-runit" class="slide level2">
+<h2>2. Основные принципы работы СИ Runit</h2>
+<p>Запускать, останавливать, перезапускать сервисы можно с помощью
+команды sv(__) Кроме того, при запуске сервиса появится каталог, в
+котором будут расположены очень полезные файлы и потоки:</p>
+<p>• pid — идентификатор процесса Unix; • stat — описание состояния
+сервиса на понятном простому пользователю языке • status — описание
+состояние процесса на языке, понятном машине • control — поток
+управления • и дp.</p>
+</section>
+<section id="преимущества-перед-другими-си" class="slide level2">
+<h2>3. Преимущества перед другими СИ</h2>
+<p>У Runit есть некоторые особенности, которые выделяют её на фоне
+остальных систем инициализации:</p>
+<ol type="1">
+<li>Быстрая система загрузки и выключения</li>
+<li>Компактность</li>
+<li>Небольшое количество кода системы инициализации</li>
+<li>Легкое создание файлов конфигурации служб</li>
+<li>Полный контроль сервисов</li>
+<li>Надежное средство журналирования и ротации логов</li>
+<li>И др</li>
+</ol>
+</section>
+<section id="способы-настройки-си-runit" class="slide level2">
+<h2>Способы настройки СИ RUNIT</h2>
+<p>Установка и настройка системы</p>
+</section>
+<section id="шаг" class="slide level2">
+<h2>1 шаг</h2>
+<pre><code>Для большинства Операционных Систем Runit ставится из стандартного менеджера пакетов (get install runit). 
+Если в Вашем менеджере нужного пакета нет, можно скачать исходники для сборки с официальной страницы
+
+![ Официальный сайт СИ RUNIT ](./image/2.png){#fig:002 width=50%}</code></pre>
+</section>
+<section id="шаг-1" class="slide level2">
+<h2>2 шаг</h2>
+<pre><code>Каждому сервису в runit соответствует директория в /etc/sv. В этой директории создаём файл запуска run. Введём команду:
+
+    mkdir /etc/sv/testservice
+    vim /etc/sv/testservice/run</code></pre>
+</section>
+<section id="шаг-2" class="slide level2">
+<h2>3 шаг</h2>
+<pre><code>Затем в файле под названием «run» записываем строку для запуска скрипта, с перенаправлениями ввода-вывода, без демонизации , но с exec:
+
+    exec node /etc/mysite/server.js 1&gt;&gt;/var/log/mysite/output2&gt;&gt;/var/log/mysite/error </code></pre>
+</section>
+<section id="шаг-3" class="slide level2">
+<h2>4 шаг</h2>
+<pre><code>Установим данному файлу разрешение на выполнение с помощью команды 
+
+    chmod +x run
+    </code></pre>
+</section>
+<section id="шаг-4" class="slide level2">
+<h2>5 шаг</h2>
+<pre><code>И теперь, чтобы запустить сервис надо передать runit команду и имя директории внутри /etc/sv
+
+    sv start testservice</code></pre>
+</section>
+<section id="примеры-применения" class="slide level2">
+<h2>Примеры применения</h2>
+<p>Места, где можно использовать систему инициализации runit, включают в
+себя: 1. Сервера и рабочие станции на базе Linux для управления
+сервисами и процессами. 2. Системы виртуализации, такие как Docker, для
+управления контейнерами и их запуска. 3. Embedded системы и устройства
+IoT, где требуется надежная и легковесная система инициализации. 4.
+Стенды разработки и тестирования для упрощения процесса запуска и
+остановки приложений. Runit является мощным инструментом для организации
+процессов и повышения стабильности работы системы. Его гибкость и
+простота позволяют использовать его в различных окружениях и облегчают
+администрирование и обслуживание системы.</p>
+</section>
+<section id="заключение" class="slide level2">
+<h2>Заключение</h2>
+<p>В заключение, система инициализации Runit представляет собой надежное
+и эффективное решение для запуска сервисов и приложений при старте
+операционной системы. Благодаря своей легковесной архитектуре и отличной
+стабильности, Runit становится все более популярным выбором среди
+пользователей Linux. Вместе с Runit мы можем делать загрузку компьютера
+более эффективной и безотказной.</p>
+</section>
+<section id="ресурсы-использованные-при-создании-доклада" class="slide level2">
+<h2>Ресурсы, использованные при создании доклада</h2>
+<ol type="1">
+<li>Cтатьи сайта-форума Habr</li>
+</ol>
+<ol type="a">
+<li>«Использование runit для своих сервисов»</li>
+<li>«Web-интерфейс для runit»</li>
+</ol>
+<ol start="2" type="1">
+<li>Статья «[Basics] Инициализация системы» на сайте «Мишка на севере»
+12.09.2021</li>
+<li>Статья «Использование runit вместо Init и вывод логов в файл» на
+сайте «Механический мир: Прибежище техножреца» 04.04.2011</li>
+<li>и другие источники</li>
+</ol>
+</section></section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^4//dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@^4//plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>

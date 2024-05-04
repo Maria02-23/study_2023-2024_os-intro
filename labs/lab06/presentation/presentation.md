@@ -51,8 +51,6 @@ monofontoptions: Scale=MatchLowercase,Scale=0.9
 :::
 ::: {.column width="30%"}
 
-![](./image/kulyabov.jpg)
-
 :::
 ::::::::::::::
 

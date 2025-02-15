@@ -1,7 +1,7 @@
 ---
 ## Front matter
 title: "Отчёт к лабораторной работе №5"
-subtitle: "Менеджер паролей pass"
+subtitle: "Мeeeeeeeeенеджер паролей pass"
 author: "Четвергова Мария Викторовна"
 
 ## Generic otions
